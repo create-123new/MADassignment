@@ -1,46 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:background="#FAFAFA"
+    android:padding="16dp"
+    tools:context=".MainActivity">
 
-    <GridLayout
-        android:id="@+id/gridLayout"
+    <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:alignmentMode="alignMargins"
-        android:rowCount="2"
-        android:orientation="horizontal">
+        android:text="Quick App Launcher"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        android:layout_gravity="center"
+        android:paddingBottom="16dp"/>
 
-        <Button
-            android:id="@+id/btnOpenWebsite"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Open Website"
-            android:layout_margin="12dp" />
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:horizontalSpacing="20dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="20dp" />
 
-        <Button
-            android:id="@+id/btnSendEmail"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Send Email"
-            android:layout_margin="12dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Assignment submitted by:-"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"/>
 
-        <Button
-            android:id="@+id/btnCall"
-            android:layout_width="150dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Make Call"
-            android:layout_margin="12dp" />
+            android:text="Sanjana Bisht\n22001311048"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
 
-        <Button
-            android:id="@+id/btnMap"
-            android:layout_width="150dp"
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Open Map"
-            android:layout_margin="12dp" />
-    </GridLayout>
+            android:layout_marginStart="20dp"
+            android:text="Somya Upadhyay\n22001311055"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
+    </LinearLayout>
+
+
+
 </LinearLayout>
+

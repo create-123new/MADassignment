@@ -1,68 +1,139 @@
 package com.example.somya_sanjana;
 
+
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
-    Button btnOpenWebsite, btnSendEmail, btnCall, btnMap;
+    // Labels and icons for each tile
+    String[] labels = {"Call", "Camera", "Email", "Browser", "SMS", "Maps"};
+    int[] icons = {
+            android.R.drawable.ic_menu_call,
+            android.R.drawable.ic_menu_camera,
+            android.R.drawable.ic_dialog_email,
+            android.R.drawable.ic_menu_compass,
+            android.R.drawable.ic_dialog_dialer,
+            android.R.drawable.ic_dialog_map
+    };
+    int[] colors = {
+            Color.parseColor("#4CAF50"),  // Green for Call
+            Color.parseColor("#2196F3"),  // Blue for Camera
+            Color.parseColor("#F44336"),  // Red for Email
+            Color.parseColor("#FF9800"),  // Orange for Browser
+            Color.parseColor("#9C27B0"),  // Purple for SMS
+            Color.parseColor("#009688")   // Teal for Maps
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnOpenWebsite = findViewById(R.id.btnOpenWebsite);
-        btnSendEmail = findViewById(R.id.btnSendEmail);
-        btnCall = findViewById(R.id.btnCall);
-        btnMap = findViewById(R.id.btnMap);
+        GridView gridView = findViewById(R.id.gridView);
+        gridView.setAdapter(new GridAdapter());
 
-        // Open Website
-        btnOpenWebsite.setOnClickListener(new View.OnClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Uri webpage = Uri.parse("https://www.who.int");
-                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-                startActivity(intent);
-            }
-        });
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: // Call
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:1234567890"));
+                        startActivity(callIntent);
+                        break;
 
-        // Send Email
-        btnSendEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                emailIntent.setData(Uri.parse("mailto:example@email.com"));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Health Inquiry");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Hello Doctor, I have a question...");
-                startActivity(emailIntent);
-            }
-        });
+                    case 1: // Camera
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivity(cameraIntent);
+                        break;
 
-        // Make Call
-        btnCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:1234567890"));
-                startActivity(callIntent);
-            }
-        });
+                    case 2: // Email
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                        emailIntent.setData(Uri.parse("mailto:someone@example.com"));
+                        startActivity(emailIntent);
+                        break;
 
-        // Open Map
-        btnMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri gmmIntentUri = Uri.parse("geo:0,0?q=hospital");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
+                    case 3: // Browser
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+                        startActivity(browserIntent);
+                        break;
+
+                    case 4: // SMS
+                        Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+                        smsIntent.setData(Uri.parse("smsto:1234567890"));
+                        smsIntent.putExtra("sms_body", "Hello from Grid Launcher!");
+                        startActivity(smsIntent);
+                        break;
+
+                    case 5: // Maps
+                        Intent mapsIntent = new Intent(Intent.ACTION_VIEW);
+                        mapsIntent.setData(Uri.parse("geo:0,0?q=Eiffel+Tower,Paris"));
+                        startActivity(mapsIntent);
+                        break;
+                }
             }
         });
     }
+
+    // Adapter for GridView
+    class GridAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return labels.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return labels[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View gridItem;
+
+            if (convertView == null) {
+                gridItem = LayoutInflater.from(getApplicationContext()).inflate(R.layout.grid_item, parent, false);
+            } else {
+                gridItem = convertView;
+            }
+
+            ImageView icon = gridItem.findViewById(R.id.icon);
+            TextView label = gridItem.findViewById(R.id.label);
+
+            Drawable iconDrawable = ContextCompat.getDrawable(MainActivity.this, icons[position]);
+            if (iconDrawable != null) {
+                iconDrawable.setTint(colors[position]);  // 💡 Use position to select correct color
+                icon.setImageDrawable(iconDrawable);
+            }
+
+           // icon.setImageResource(icons[position]);
+            label.setText(labels[position]);
+
+            return gridItem;
+        }
+    }
 }
+
